@@ -273,21 +273,6 @@ Entry point of the project:
 
 The project uses a robust CSV loader to avoid issues.
 
----
-
-# 🧪 Future Improvements (Optional Enhancements)
-
-You can extend the project with features like:
-
-* 📈 Weekly comparison charts (matplotlib)
-* 🌐 Web dashboard (Flask/React)
-* 📱 Mobile UI
-* 🎯 Productivity scoring system
-* 🔍 Detecting app addiction trends
-* 📔 Export report as PDF
-* 🤖 AI-based productivity suggestions
-
-Just ask if you want me to build any of these.
 
 ---
 
