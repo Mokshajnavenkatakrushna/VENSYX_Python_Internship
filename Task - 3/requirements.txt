@@ -1,0 +1,11 @@
+google-genai
+python-dotenv
+flask
+PyPDF2
+pytesseract
+pillow
+python-docx
+pandas
+openpyxl
+numpy<2.0.0
+pydantic
