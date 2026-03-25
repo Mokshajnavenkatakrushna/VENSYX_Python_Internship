@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Document Extractor - Premium</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f3f4f6;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(to right, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* File Upload Styling */
+        .upload-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #f8fafc;
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .upload-container input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .file-name {
+            margin-top: 0.5rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        button.submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s, transform 0.1s;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+        }
+
+        button.submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button.submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Result Styling */
+        .result-content {
+            background-color: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            overflow-x: auto;
+            color: #374151;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .result-content h1, .result-content h2, .result-content h3 {
+            color: #111827;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .result-content h1 { font-size: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;}
+        .result-content h2 { font-size: 1.25rem; }
+        .result-content h3 { font-size: 1.1rem; }
+
+        .result-content ul, .result-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-content li { margin-bottom: 0.5rem; }
+
+        .result-content p { color: #374151; margin-bottom: 1rem; }
+
+        .result-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .result-content table, .result-content th, .result-content td {
+            border: none;
+        }
+
+        .result-content th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        .result-content th, .result-content td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-content tr:last-child td {
+            border-bottom: none;
+        }
+
+        .result-content tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .result-content strong {
+            color: #111827;
+            font-weight: 600;
+        }
+
+        .result-content blockquote {
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+            margin-left: 0;
+            color: #4b5563;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>AI Document Extractor</h1>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2>Upload Document</h2>
+        <p>Drop your bill, invoice, or document to extract pixel-perfect intelligence.</p>
+        
+        <form method="post" enctype="multipart/form-data">
+            <div class="upload-container">
+                <div class="upload-icon">📄</div>
+                <div style="font-weight: 500; color: #475569;">Click or drag file to this area to upload</div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.5rem;">Supports JPG, PNG, PDF, DOCX, XLSX, TXT</div>
+                <input type="file" name="file" id="file-upload" required onchange="document.getElementById('file-name').textContent = this.files[0] ? this.files[0].name : '';">
+            </div>
+            <div id="file-name" class="file-name" style="text-align: center; margin-bottom: 1.5rem;"></div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">Extract Intelligence ⚡️</button>
+        </form>
+    </div>
+
+    {% if text %}
+    <div class="card" id="results" style="animation: fadeIn 0.5s ease;">
+        <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--primary);">✨</span> Extracted Information
+        </h2>
+        <div id="raw-markdown" style="display: none;">{{ text }}</div>
+        <div id="content" class="result-content"></div>
+    </div>
+
+    <script>
+        const rawMarkdown = document.getElementById('raw-markdown').textContent.trim();
+        marked.setOptions({ gfm: true, breaks: true });
+        document.getElementById('content').innerHTML = marked.parse(rawMarkdown);
+        
+        // Scroll to results smoothly
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    </script>
+    {% endif %}
+</div>
+
+<script>
+    // Add loading state to button
+    document.querySelector('form').addEventListener('submit', function() {
+        const btn = document.getElementById('submit-btn');
+        btn.textContent = 'Extracting... This may take a moment ⏳';
+        btn.style.opacity = '0.8';
+        btn.style.cursor = 'not-allowed';
+    });
+</script>
+
+</body>
+</html>
