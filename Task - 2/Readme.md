@@ -144,9 +144,4 @@ Pandas
 Excel
 Random Sampling
 
----
 
-## Author
-
-Internship Task 2
-Property Recommendation System
